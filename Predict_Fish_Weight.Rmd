@@ -51,21 +51,97 @@ Whitefish <- select(Whitefish, -Species)
 
 ## Perch
 
+
+```{r}
+library(leaps)
+regsubsets.out <-
+  regsubsets(Weight ~ . ,
+                          data = Perch,
+                          nbest = 1, 
+                          nvmax = NULL, 
+                          force.in = NULL, force.out = NULL, 
+                          method = "exhaustive")
+
+summary.out <- summary(regsubsets.out)
+as.data.frame(summary.out$outmat)
+```
+
+
+```{r}
+library(car)
+subsets(regsubsets.out, statistic="adjr2", legend="bottom", main="adjr2")
+```
+
+
 ### Best Models
+
+The best model is two element model. H and W model
 
 ### Best Two regressor model
 
+For this one is also H and W model.
 
 ## Pike
 
+```{r}
+library(leaps)
+regsubsets.out <-
+  regsubsets(Weight ~ . ,
+                          data = Pike,
+                          nbest = 1, 
+                          nvmax = NULL, 
+                          force.in = NULL, force.out = NULL, 
+                          method = "exhaustive")
+
+summary.out <- summary(regsubsets.out)
+as.data.frame(summary.out$outmat)
+```
+
+```{r}
+library(car)
+subsets(regsubsets.out, statistic="adjr2", legend="bottom", main="adjr2")
+```
+
+
+
 ### Best Models
 
+Best model is model5
+
 ### Best Two regressor model
+
+Best model is model3
+
+The best model is different to the best two regressor model so we will run ANOVA.
+
+```{r}
+model5 = lm(Weight ~ ., data = Pike)
+summary.lm(model5)
+
+model2 = lm(Weight ~ Length2 + Height + Width, data = Pike)
+model3 = lm(Weight ~ Length2 + Height, data = Pike)
+
+anova(model5, model2)
+```
+
+
+```{r}
+library(car)
+subsets(regsubsets.out, statistic="adjr2", legend="bottom", main="adjr2")
+```
+
 
 ## Roach
 
 ### Best Models
 
+Seems like the best model is model 2, where we can find L3 and W.
+
 ### Best Two regressor model
 
+The best model and the best regressor model are both the same, being model 2= L3-W.
+
 ## Final Summary Statements
+
+For Perch and Roach the best models and the best two regressor models are the same; the model 2 for
+both of them so we didn't have to compare or use ANOVA to find the p-value.
